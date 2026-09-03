@@ -1,0 +1,5322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WanderPlan - Smart Travel Planner</title>
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f1f5f9;
+    color:#1e293b;
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:Arial,sans-serif;
+}
+
+button,
+select,
+input{
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   HOME PAGE
+===================================================== */
+
+#home{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:30px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,.96),
+            rgba(15,23,42,.98)
+        );
+    color:white;
+}
+
+.home-content{
+    max-width:850px;
+}
+
+.home-content h1{
+    font-size:62px;
+    margin-bottom:20px;
+}
+
+.home-content p{
+    font-size:21px;
+    line-height:1.7;
+    margin-bottom:35px;
+}
+
+.start-btn{
+    padding:16px 40px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#2563eb;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.start-btn:hover{
+    transform:translateY(-3px);
+    background:#dbeafe;
+}
+
+
+/* =====================================================
+   PLANNER
+===================================================== */
+
+#planner{
+    display:none;
+}
+
+nav{
+    height:70px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 8%;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    color:#2563eb;
+    font-size:25px;
+    font-weight:bold;
+}
+
+nav a{
+    color:#334155;
+    text-decoration:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+nav a:hover{
+    color:#2563eb;
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#1e3a8a);
+    color:white;
+    text-align:center;
+    padding:60px 20px;
+}
+
+.header h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.header p{
+    font-size:18px;
+}
+
+.container{
+    width:90%;
+    max-width:1150px;
+    margin:40px auto;
+}
+
+.box{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    margin-bottom:30px;
+}
+
+.box h2{
+    margin-bottom:25px;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.input-box{
+    display:flex;
+    flex-direction:column;
+}
+
+.input-box label{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+input,
+select,
+textarea{
+    padding:13px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:16px;
+    width:100%;
+    background:white;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.full{
+    grid-column:1 / 3;
+}
+
+.create-btn{
+    width:100%;
+    margin-top:25px;
+    padding:16px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.create-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-1px);
+}
+
+
+/* =====================================================
+   DESTINATION SEARCH
+===================================================== */
+
+.destination-search{
+    position:relative;
+}
+
+.destination-suggestions{
+    margin-top:8px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.destination-chip{
+    padding:8px 12px;
+    border-radius:20px;
+    background:#eff6ff;
+    color:#2563eb;
+    cursor:pointer;
+    font-size:13px;
+    border:1px solid #bfdbfe;
+    transition:.2s;
+}
+
+.destination-chip:hover{
+    background:#dbeafe;
+    transform:translateY(-1px);
+}
+
+
+/* =====================================================
+   RECOMMENDATION
+===================================================== */
+
+.recommendation{
+    margin:15px 0 25px;
+    padding:15px;
+    border-left:4px solid #2563eb;
+    background:#eff6ff;
+    border-radius:7px;
+    line-height:1.5;
+    color:#1e40af;
+}
+
+
+/* =====================================================
+   LANDMARK PREVIEW
+===================================================== */
+
+#landmarkPreview{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    background:#f8fafc;
+    border-radius:10px;
+}
+
+#landmarkPreview h3{
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.chip{
+    padding:9px 13px;
+    background:white;
+    border:1px solid #bfdbfe;
+    color:#1d4ed8;
+    border-radius:20px;
+    font-size:14px;
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+#result{
+    display:none;
+}
+
+.trip-title{
+    background:#eff6ff;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.trip-title h2{
+    color:#2563eb;
+    margin-bottom:8px;
+}
+
+.details{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.detail{
+    background:#f8fafc;
+    padding:20px;
+    text-align:center;
+    border-radius:10px;
+}
+
+.detail small{
+    display:block;
+    color:#64748b;
+    margin-bottom:8px;
+}
+
+.detail strong{
+    font-size:18px;
+}
+
+
+/* =====================================================
+   QUICK ACTIONS
+===================================================== */
+
+.quick-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+}
+
+.action-btn{
+    border:none;
+    padding:11px 16px;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.action-btn:hover{
+    background:#1d4ed8;
+}
+
+.action-btn.secondary{
+    background:#e2e8f0;
+    color:#1e293b;
+}
+
+#favoriteMessage{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    background:#dcfce7;
+    color:#166534;
+    border-radius:8px;
+}
+
+
+/* =====================================================
+   TRIP SCORE
+===================================================== */
+
+#scoreBox,
+#budgetBox,
+#foodBox,
+#hotelBox,
+#transportBox,
+#nearbyBox,
+#weatherBox,
+#mapBox{
+    display:none;
+}
+
+.score-box{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:25px;
+    align-items:center;
+}
+
+.score-circle{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#60a5fa);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    margin:auto;
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
+}
+
+.score-circle span{
+    font-size:42px;
+}
+
+.score-circle small{
+    font-size:14px;
+}
+
+.progress-row{
+    margin-bottom:15px;
+}
+
+.progress-label{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:6px;
+    font-size:14px;
+}
+
+.progress{
+    height:10px;
+    background:#e2e8f0;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:#2563eb;
+    width:0;
+    transition:width .7s ease;
+}
+
+
+/* =====================================================
+   BUDGET
+===================================================== */
+
+.budget-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+}
+
+.budget-card{
+    background:#f8fafc;
+    padding:18px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.budget-card .icon{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.budget-card small{
+    display:block;
+    color:#64748b;
+    margin-bottom:5px;
+}
+
+.budget-card strong{
+    color:#2563eb;
+}
+
+
+/* =====================================================
+   ITINERARY
+===================================================== */
+
+#itineraryBox{
+    display:none;
+}
+
+.day{
+    background:#f8fafc;
+    padding:22px;
+    margin-bottom:18px;
+    border-radius:12px;
+    border-left:5px solid #2563eb;
+}
+
+.day-header{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.day-number{
+    min-width:65px;
+    height:65px;
+    background:#2563eb;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-weight:bold;
+}
+
+.day-header h3{
+    color:#1e293b;
+}
+
+.day-header p{
+    color:#64748b;
+    margin-top:5px;
+}
+
+.time-slot{
+    background:white;
+    padding:17px;
+    margin-top:12px;
+    border-radius:9px;
+    border:1px solid #e2e8f0;
+}
+
+.time-slot h4{
+    color:#2563eb;
+    margin-bottom:7px;
+}
+
+.time-slot p{
+    color:#475569;
+    line-height:1.5;
+}
+
+.tags{
+    margin-top:8px;
+}
+
+.tag{
+    display:inline-block;
+    background:#dbeafe;
+    color:#1d4ed8;
+    padding:5px 9px;
+    border-radius:15px;
+    font-size:12px;
+    margin-right:5px;
+}
+
+
+/* =====================================================
+   RECOMMENDATION CARDS
+===================================================== */
+
+.recommendation-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.rec-card{
+    padding:20px;
+    background:#f8fafc;
+    border-radius:10px;
+    border-top:4px solid #2563eb;
+}
+
+.rec-card h3{
+    margin-bottom:8px;
+}
+
+.rec-card p{
+    color:#64748b;
+    line-height:1.5;
+}
+
+
+/* =====================================================
+   NEARBY PLACE CARDS
+===================================================== */
+
+.place-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.place-tab{
+    padding:10px 18px;
+    border:none;
+    border-radius:20px;
+    background:#e2e8f0;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.place-tab.active{
+    background:#2563eb;
+    color:white;
+}
+
+.place-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.place-card{
+    background:#f8fafc;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid #e2e8f0;
+    transition:.3s;
+}
+
+.place-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+}
+
+.place-card img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+}
+
+.place-content{
+    padding:16px;
+}
+
+.place-content h3{
+    margin-bottom:8px;
+    color:#1e293b;
+}
+
+.place-content p{
+    color:#64748b;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:8px;
+}
+
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:15px;
+    background:#dcfce7;
+    color:#166534;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.map-btn{
+    display:inline-block;
+    margin-top:8px;
+    padding:8px 12px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:13px;
+}
+
+.map-btn:hover{
+    background:#1d4ed8;
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+.map-container{
+    overflow:hidden;
+    border-radius:12px;
+}
+
+.map-container iframe{
+    width:100%;
+    height:350px;
+    border:0;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    padding:30px;
+    margin-top:50px;
+}
+
+footer p{
+    margin-top:8px;
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print{
+
+    nav,
+    .header,
+    .create-btn,
+    .quick-actions,
+    footer,
+    #formBox{
+        display:none !important;
+    }
+
+    body{
+        background:white;
+    }
+
+    .box{
+        box-shadow:none;
+        border:1px solid #ddd;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:900px){
+
+    .details{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .budget-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .place-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .recommendation-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(max-width:800px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:1;
+    }
+
+    .score-box{
+        grid-template-columns:1fr;
+    }
+
+    .home-content h1{
+        font-size:48px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .home-content h1{
+        font-size:40px;
+    }
+
+    .home-content p{
+        font-size:17px;
+    }
+
+    .header h1{
+        font-size:32px;
+    }
+
+    .details,
+    .budget-grid,
+    .place-grid,
+    .recommendation-grid{
+        grid-template-columns:1fr;
+    }
+
+    .box{
+        padding:20px;
+    }
+
+    nav{
+        padding:0 5%;
+    }
+
+    .day-header{
+        align-items:flex-start;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<section id="home">
+
+    <div class="home-content">
+
+        <h1>✈️ WanderPlan</h1>
+
+        <p>
+            Your smart travel companion.
+            Discover destinations, explore landmarks,
+            plan your daily itinerary, manage your budget,
+            discover local food and find the best experiences.
+        </p>
+
+        <button
+            class="start-btn"
+            onclick="showPlanner()"
+        >
+            Start Planning →
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PLANNER
+===================================================== -->
+
+<section id="planner">
+
+<nav>
+
+    <div class="logo">
+        ✈️ WanderPlan
+    </div>
+
+    <a onclick="showHome()">
+        ← Home
+    </a>
+
+</nav>
+
+
+<section class="header">
+
+    <h1>
+        Plan Your Perfect Trip
+    </h1>
+
+    <p>
+        Tell us about your travel preferences and we'll build a personalized plan.
+    </p>
+
+</section>
+
+
+<main class="container">
+
+
+<!-- =====================================================
+     FORM
+===================================================== -->
+
+<div class="box" id="formBox">
+
+    <h2>🧳 Smart Trip Planner</h2>
+
+
+    <div class="input-box">
+
+        <label for="travelerType">
+            👤 What type of traveler are you?
+        </label>
+
+        <select
+            id="travelerType"
+            onchange="updateLocations()"
+        >
+
+            <option value="">
+                -- Select Traveler Type --
+            </option>
+
+            <option value="adventure">
+                🧗 Adventure Traveler
+            </option>
+
+            <option value="relaxation">
+                🏖️ Relaxation Traveler
+            </option>
+
+            <option value="family">
+                👨‍👩‍👧 Family Traveler
+            </option>
+
+            <option value="romantic">
+                ❤️ Romantic Traveler
+            </option>
+
+            <option value="luxury">
+                💎 Luxury Traveler
+            </option>
+
+            <option value="budget">
+                🎒 Budget Traveler
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div
+        class="recommendation"
+        id="recommendation"
+    >
+        Select your traveler type to see recommended destinations.
+    </div>
+
+
+    <div class="form-grid">
+
+
+        <!-- DESTINATION -->
+
+        <div class="input-box destination-search">
+
+            <label for="destination">
+                📍 Destination
+            </label>
+
+            <input
+                type="text"
+                id="destination"
+                placeholder="Search destination e.g. Goa"
+                autocomplete="off"
+                oninput="filterDestinations()"
+            >
+
+            <div
+                id="destinationSuggestions"
+                class="destination-suggestions"
+            ></div>
+
+        </div>
+
+
+        <!-- TRAVELERS -->
+
+        <div class="input-box">
+
+            <label for="travelers">
+                👥 Number of Travelers
+            </label>
+
+            <input
+                type="number"
+                id="travelers"
+                min="1"
+                value="2"
+            >
+
+        </div>
+
+
+        <!-- START -->
+
+        <div class="input-box">
+
+            <label for="start">
+                📅 Start Date
+            </label>
+
+            <input
+                type="date"
+                id="start"
+            >
+
+        </div>
+
+
+        <!-- END -->
+
+        <div class="input-box">
+
+            <label for="end">
+                📅 End Date
+            </label>
+
+            <input
+                type="date"
+                id="end"
+            >
+
+        </div>
+
+
+        <!-- BUDGET -->
+
+        <div class="input-box">
+
+            <label for="budget">
+                💰 Total Budget (₹)
+            </label>
+
+            <input
+                type="number"
+                id="budget"
+                placeholder="50000"
+                min="1"
+            >
+
+        </div>
+
+
+        <!-- STYLE -->
+
+        <div class="input-box">
+
+            <label for="style">
+                🎯 Travel Style
+            </label>
+
+            <select id="style">
+
+                <option>Adventure</option>
+                <option>Relaxation</option>
+                <option>Family</option>
+                <option>Romantic</option>
+                <option>Luxury</option>
+                <option>Budget</option>
+                <option>Cultural</option>
+                <option>Nature</option>
+                <option>Food & Shopping</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- TRANSPORT -->
+
+        <div class="input-box">
+
+            <label for="transport">
+                🚗 Preferred Transport
+            </label>
+
+            <select id="transport">
+
+                <option>Car</option>
+                <option>Train</option>
+                <option>Flight</option>
+                <option>Bus</option>
+                <option>Bike</option>
+                <option>Public Transport</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ACTIVITIES -->
+
+        <div class="input-box">
+
+            <label>
+                ⭐ Places / Activities You Want
+            </label>
+
+            <textarea
+                id="activities"
+                placeholder="Example: beaches, trekking, museums, shopping"
+            ></textarea>
+
+        </div>
+
+    </div>
+
+
+    <!-- LANDMARK PREVIEW -->
+
+    <div id="landmarkPreview">
+
+        <h3>
+            📍 Suggested Places Near This Destination
+        </h3>
+
+        <div
+            class="chips"
+            id="landmarkList"
+        ></div>
+
+    </div>
+
+
+    <button
+        class="create-btn"
+        onclick="createTrip()"
+    >
+        ✨ Create My Personalized Trip
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     RESULT
+===================================================== -->
+
+<div class="box" id="result">
+
+    <div class="trip-title">
+
+        <h2 id="resultDestination">
+            Your Trip
+        </h2>
+
+        <p id="resultStyle"></p>
+
+    </div>
+
+
+    <div class="details">
+
+        <div class="detail">
+
+            <small>DATES</small>
+
+            <strong id="resultDates">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detail">
+
+            <small>TRAVELERS</small>
+
+            <strong id="resultTravelers">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detail">
+
+            <small>DURATION</small>
+
+            <strong id="resultDays">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detail">
+
+            <small>BUDGET</small>
+
+            <strong id="resultBudget">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="quick-actions">
+
+        <button
+            class="action-btn"
+            onclick="regenerateTrip()"
+        >
+            🔄 Regenerate
+        </button>
+
+
+        <button
+            class="action-btn"
+            onclick="saveFavorite()"
+        >
+            ❤️ Save Trip
+        </button>
+
+
+        <button
+            class="action-btn"
+            onclick="window.print()"
+        >
+            📄 Download / Print PDF
+        </button>
+
+
+        <button
+            class="action-btn secondary"
+            onclick="openMap()"
+        >
+            🗺️ Open Map
+        </button>
+
+    </div>
+
+
+    <div id="favoriteMessage">
+        ❤️ Your trip has been saved in this browser.
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCORE
+===================================================== -->
+
+<div
+    class="box"
+    id="scoreBox"
+>
+
+    <h2>
+        ⭐ Your Trip Score
+    </h2>
+
+
+    <div class="score-box">
+
+        <div class="score-circle">
+
+            <span id="scoreNumber">
+                0
+            </span>
+
+            <small>
+                / 100
+            </small>
+
+        </div>
+
+
+        <div>
+
+            <div class="progress-row">
+
+                <div class="progress-label">
+                    <span>🏞️ Experience</span>
+                    <strong id="experienceScore">0%</strong>
+                </div>
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        id="experienceBar"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="progress-row">
+
+                <div class="progress-label">
+                    <span>💰 Budget Friendly</span>
+                    <strong id="budgetScore">0%</strong>
+                </div>
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        id="budgetBar"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="progress-row">
+
+                <div class="progress-label">
+                    <span>❤️ Traveler Match</span>
+                    <strong id="matchScore">0%</strong>
+                </div>
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        id="matchBar"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="progress-row">
+
+                <div class="progress-label">
+                    <span>🗺️ Destination Variety</span>
+                    <strong id="varietyScore">0%</strong>
+                </div>
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        id="varietyBar"
+                    ></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     BUDGET
+===================================================== -->
+
+<div
+    class="box"
+    id="budgetBox"
+>
+
+    <h2>
+        💰 Smart Budget Breakdown
+    </h2>
+
+
+    <div class="budget-grid">
+
+        <div class="budget-card">
+
+            <div class="icon">🏨</div>
+
+            <small>
+                Hotels
+            </small>
+
+            <strong id="hotelBudget">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <div class="budget-card">
+
+            <div class="icon">🍴</div>
+
+            <small>
+                Food
+            </small>
+
+            <strong id="foodBudget">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <div class="budget-card">
+
+            <div class="icon">🚗</div>
+
+            <small>
+                Transport
+            </small>
+
+            <strong id="transportBudget">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <div class="budget-card">
+
+            <div class="icon">🎟️</div>
+
+            <small>
+                Activities
+            </small>
+
+            <strong id="activityBudget">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <div class="budget-card">
+
+            <div class="icon">🛟</div>
+
+            <small>
+                Emergency
+            </small>
+
+            <strong id="emergencyBudget">
+                ₹0
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ITINERARY
+===================================================== -->
+
+<div
+    class="box"
+    id="itineraryBox"
+>
+
+    <h2>
+        🗓️ Your Personalized Itinerary
+    </h2>
+
+    <div id="itinerary"></div>
+
+</div>
+
+
+<!-- =====================================================
+     FOOD
+===================================================== -->
+
+<div
+    class="box"
+    id="foodBox"
+>
+
+    <h2>
+        🍴 Local Food You Should Try
+    </h2>
+
+    <div
+        class="recommendation-grid"
+        id="foodList"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     HOTELS
+===================================================== -->
+
+<div
+    class="box"
+    id="hotelBox"
+>
+
+    <h2>
+        🏨 Hotel Suggestions
+    </h2>
+
+    <div
+        class="recommendation-grid"
+        id="hotelList"
+    ></div>
+
+    <p style="margin-top:15px;color:#64748b;">
+        These are example categories. Connect a hotel API later
+        for live prices and availability.
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     TRANSPORT
+===================================================== -->
+
+<div
+    class="box"
+    id="transportBox"
+>
+
+    <h2>
+        🚗 Transportation Suggestions
+    </h2>
+
+    <div
+        class="recommendation-grid"
+        id="transportList"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     NEARBY
+===================================================== -->
+
+<div
+    class="box"
+    id="nearbyBox"
+>
+
+    <h2>
+        📍 Nearby Restaurants, Hotels & Attractions
+    </h2>
+
+    <p style="color:#64748b;margin-bottom:20px;">
+        Demo recommendations based on the selected destination.
+        You can connect Google Places or another Places API for live data.
+    </p>
+
+
+    <div class="place-tabs">
+
+        <button
+            class="place-tab active"
+            onclick="showPlaces('restaurant',this)"
+        >
+            🍴 Restaurants
+        </button>
+
+
+        <button
+            class="place-tab"
+            onclick="showPlaces('hotel',this)"
+        >
+            🏨 Hotels
+        </button>
+
+
+        <button
+            class="place-tab"
+            onclick="showPlaces('landmark',this)"
+        >
+            📸 Landmarks
+        </button>
+
+    </div>
+
+
+    <div
+        id="placeGrid"
+        class="place-grid"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     WEATHER
+===================================================== -->
+
+<div
+    class="box"
+    id="weatherBox"
+>
+
+    <h2>
+        🌦️ Travel Weather
+    </h2>
+
+
+    <div class="recommendation">
+
+        <strong id="weatherTitle">
+            Weather planning
+        </strong>
+
+        <p
+            id="weatherText"
+            style="margin-top:8px;"
+        >
+            Weather information will appear here.
+        </p>
+
+    </div>
+
+
+    <p style="color:#64748b;margin-top:10px;">
+        This is a planning estimate. Connect a weather API
+        for live forecasts.
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     MAP
+===================================================== -->
+
+<div
+    class="box"
+    id="mapBox"
+>
+
+    <h2>
+        🗺️ Destination Map
+    </h2>
+
+
+    <div class="map-container">
+
+        <iframe
+            id="mapFrame"
+            loading="lazy"
+            src=""
+        ></iframe>
+
+    </div>
+
+</div>
+
+
+</main>
+
+
+<footer>
+
+    <h3>
+        ✈️ WanderPlan
+    </h3>
+
+    <p>
+        Plan less. Travel more.
+    </p>
+
+</footer>
+
+</section>
+
+
+<script>
+
+/* =====================================================
+   DESTINATIONS BY TRAVELER TYPE
+===================================================== */
+
+const locations = {
+
+    adventure:[
+        "Manali",
+        "Rishikesh",
+        "Goa",
+        "Leh",
+        "Shillong",
+        "Gangtok",
+        "Darjeeling",
+        "Wayanad",
+        "Coorg",
+        "Gokarna"
+    ],
+
+    relaxation:[
+        "Goa",
+        "Munnar",
+        "Alappuzha",
+        "Varkala",
+        "Ooty",
+        "Udaipur",
+        "Kovalam",
+        "Kumarakom",
+        "Pondicherry"
+    ],
+
+    family:[
+        "Jaipur",
+        "Agra",
+        "Delhi",
+        "Ooty",
+        "Mysore",
+        "Shimla",
+        "Hyderabad",
+        "Mumbai",
+        "Bengaluru",
+        "Puri"
+    ],
+
+    romantic:[
+        "Udaipur",
+        "Manali",
+        "Munnar",
+        "Goa",
+        "Ooty",
+        "Jaisalmer",
+        "Alappuzha",
+        "Kovalam",
+        "Pondicherry"
+    ],
+
+    luxury:[
+        "Udaipur",
+        "Goa",
+        "Mumbai",
+        "Jaipur",
+        "Munnar",
+        "Jaisalmer",
+        "Mysore",
+        "Dubai",
+        "Singapore"
+    ],
+
+    budget:[
+        "Rishikesh",
+        "Varanasi",
+        "Jaipur",
+        "Goa",
+        "Amritsar",
+        "Pushkar",
+        "Gokarna",
+        "Kolkata",
+        "Puri",
+        "Bhubaneswar"
+    ]
+
+};
+
+
+/* =====================================================
+   60+ DESTINATIONS
+===================================================== */
+
+const allDestinations=[
+
+"Agra",
+"Ahmedabad",
+"Alappuzha",
+"Amritsar",
+"Andaman",
+"Aurangabad",
+"Bengaluru",
+"Bhubaneswar",
+"Bikaner",
+"Bhopal",
+"Chandigarh",
+"Chennai",
+"Coorg",
+"Darjeeling",
+"Dehradun",
+"Delhi",
+"Dharamshala",
+"Diu",
+"Dubai",
+"Gangtok",
+"Goa",
+"Gokarna",
+"Gulmarg",
+"Haridwar",
+"Hampi",
+"Hyderabad",
+"Indore",
+"Jaipur",
+"Jaisalmer",
+"Jalandhar",
+"Jodhpur",
+"Kashmir",
+"Kochi",
+"Konark",
+"Kodaikanal",
+"Kolkata",
+"Kovalam",
+"Kumarakom",
+"Leh",
+"Lonavala",
+"Lucknow",
+"Madurai",
+"Manali",
+"Mangalore",
+"Munnar",
+"Mysore",
+"Mumbai",
+"Nagpur",
+"Nainital",
+"Nashik",
+"Ooty",
+"Panchgani",
+"Patna",
+"Pondicherry",
+"Puri",
+"Pushkar",
+"Raipur",
+"Ranchi",
+"Rishikesh",
+"Shimla",
+"Shillong",
+"Sikkim",
+"Srinagar",
+"Surat",
+"Thanjavur",
+"Thiruvananthapuram",
+"Udaipur",
+"Ujjain",
+"Varanasi",
+"Varkala",
+"Visakhapatnam",
+"Wayanad",
+"Singapore"
+];
+
+
+/* =====================================================
+   LANDMARK DATA
+===================================================== */
+
+const landmarks={
+
+Agra:[
+"Taj Mahal",
+"Agra Fort",
+"Mehtab Bagh",
+"Itmad-ud-Daulah",
+"Akbar's Tomb"
+],
+
+Ahmedabad:[
+"Sabarmati Ashram",
+"Adalaj Stepwell",
+"Kankaria Lake",
+"Sidi Saiyyed Mosque",
+"Science City"
+],
+
+Alappuzha:[
+"Alleppey Backwaters",
+"Alappuzha Beach",
+"Vembanad Lake",
+"Marari Beach",
+"Krishnapuram Palace"
+],
+
+Amritsar:[
+"Golden Temple",
+"Jallianwala Bagh",
+"Wagah Border",
+"Partition Museum",
+"Durgiana Temple"
+],
+
+Andaman:[
+"Cellular Jail",
+"Radhanagar Beach",
+"Ross Island",
+"Elephant Beach",
+"North Bay Island"
+],
+
+Aurangabad:[
+"Ajanta Caves",
+"Ellora Caves",
+"Bibi Ka Maqbara",
+"Daulatabad Fort",
+"Panchakki"
+],
+
+Bengaluru:[
+"Bangalore Palace",
+"Lalbagh Botanical Garden",
+"Cubbon Park",
+"Vidhana Soudha",
+"ISKCON Temple"
+],
+
+Bhubaneswar:[
+"Lingaraj Temple",
+"Udayagiri Caves",
+"Khandagiri Caves",
+"Dhauli Shanti Stupa",
+"Nandankanan Zoological Park"
+],
+
+Bikaner:[
+"Junagarh Fort",
+"Lalgarh Palace",
+"Karni Mata Temple",
+"Rampuria Haveli",
+"Gajner Palace"
+],
+
+Bhopal:[
+"Upper Lake",
+"Sanchi Stupa",
+"Bhimbetka",
+"Van Vihar",
+"Taj-ul-Masajid"
+],
+
+Chandigarh:[
+"Rock Garden",
+"Sukhna Lake",
+"Rose Garden",
+"Capitol Complex",
+"Elante Mall"
+],
+
+Chennai:[
+"Marina Beach",
+"Kapaleeshwarar Temple",
+"Fort St George",
+"San Thome Basilica",
+"Government Museum"
+],
+
+Coorg:[
+"Abbey Falls",
+"Raja's Seat",
+"Dubare Elephant Camp",
+"Mandalpatti",
+"Talakaveri"
+],
+
+Darjeeling:[
+"Tiger Hill",
+"Darjeeling Himalayan Railway",
+"Batasia Loop",
+"Peace Pagoda",
+"Happy Valley Tea Estate"
+],
+
+Dehradun:[
+"Robber's Cave",
+"Sahastradhara",
+"Forest Research Institute",
+"Tapkeshwar Temple",
+"Mindrolling Monastery"
+],
+
+Delhi:[
+"India Gate",
+"Red Fort",
+"Qutub Minar",
+"Humayun's Tomb",
+"Lotus Temple"
+],
+
+Dharamshala:[
+"McLeod Ganj",
+"Dalai Lama Temple",
+"Bhagsu Waterfall",
+"Triund",
+"Norbulingka Institute"
+],
+
+Diu:[
+"Diu Fort",
+"Naida Caves",
+"Nagoa Beach",
+"St Paul's Church",
+"Ghogla Beach"
+],
+
+Dubai:[
+"Burj Khalifa",
+"Dubai Mall",
+"Palm Jumeirah",
+"Dubai Marina",
+"Museum of the Future"
+],
+
+Gangtok:[
+"Tsomgo Lake",
+"Rumtek Monastery",
+"Nathu La Pass",
+"MG Marg",
+"Banjhakri Falls"
+],
+
+Goa:[
+"Baga Beach",
+"Calangute Beach",
+"Fort Aguada",
+"Basilica of Bom Jesus",
+"Dudhsagar Falls",
+"Vagator Beach",
+"Anjuna Beach",
+"Palolem Beach",
+"Se Cathedral",
+"Reis Magos Fort"
+],
+
+Gokarna:[
+"Om Beach",
+"Kudle Beach",
+"Half Moon Beach",
+"Mahabaleshwar Temple",
+"Yana Caves"
+],
+
+Gulmarg:[
+"Gulmarg Gondola",
+"Apharwat Peak",
+"Khilanmarg",
+"Gulmarg Biosphere Reserve",
+"St Mary's Church"
+],
+
+Haridwar:[
+"Har Ki Pauri",
+"Mansa Devi Temple",
+"Chandi Devi Temple",
+"Ganga Aarti",
+"Rajaji National Park"
+],
+
+Hampi:[
+"Virupaksha Temple",
+"Vijaya Vittala Temple",
+"Hampi Bazaar",
+"Lotus Mahal",
+"Matanga Hill"
+],
+
+Hyderabad:[
+"Charminar",
+"Golconda Fort",
+"Hussain Sagar Lake",
+"Salar Jung Museum",
+"Chowmahalla Palace"
+],
+
+Indore:[
+"Rajwada Palace",
+"Lal Bagh Palace",
+"Sarafa Bazaar",
+"Kanch Mandir",
+"Patalpani Waterfall"
+],
+
+Jaipur:[
+"Amber Fort",
+"City Palace",
+"Hawa Mahal",
+"Jantar Mantar",
+"Nahargarh Fort",
+"Jaigarh Fort",
+"Jal Mahal",
+"Albert Hall Museum",
+"Galta Ji Temple",
+"Chand Baori"
+],
+
+Jaisalmer:[
+"Jaisalmer Fort",
+"Patwon Ki Haveli",
+"Sam Sand Dunes",
+"Gadisar Lake",
+"Kuldhara Village"
+],
+
+Jalandhar:[
+"Devi Talab Mandir",
+"Wonderland Theme Park",
+"Pushpa Gujral Science City",
+"Rangla Punjab Haveli",
+"Sadar Bazar"
+],
+
+Jodhpur:[
+"Mehrangarh Fort",
+"Jaswant Thada",
+"Umaid Bhawan Palace",
+"Blue City",
+"Mandore Gardens"
+],
+
+Kashmir:[
+"Dal Lake",
+"Shalimar Bagh",
+"Nishat Bagh",
+"Gulmarg",
+"Pahalgam",
+"Sonamarg"
+],
+
+Kochi:[
+"Fort Kochi",
+"Chinese Fishing Nets",
+"Mattancherry Palace",
+"Jewish Synagogue",
+"Marine Drive"
+],
+
+Konark:[
+"Konark Sun Temple",
+"Chandrabhaga Beach",
+"Archaeological Museum",
+"Ramachandi Temple",
+"Pipili"
+],
+
+Kodaikanal:[
+"Kodaikanal Lake",
+"Coaker's Walk",
+"Pillar Rocks",
+"Bryant Park",
+"Silver Cascade Falls"
+],
+
+Kolkata:[
+"Victoria Memorial",
+"Howrah Bridge",
+"Indian Museum",
+"St Paul's Cathedral",
+"Park Street"
+],
+
+Kovalam:[
+"Lighthouse Beach",
+"Hawa Beach",
+"Samudra Beach",
+"Vizhinjam",
+"Kovalam Lighthouse"
+],
+
+Kumarakom:[
+"Kumarakom Bird Sanctuary",
+"Vembanad Lake",
+"Kumarakom Backwaters",
+"Pathiramanal Island",
+"Aruvikkuzhi Waterfall"
+],
+
+Leh:[
+"Shanti Stupa",
+"Leh Palace",
+"Magnetic Hill",
+"Thiksey Monastery",
+"Pangong Lake",
+"Nubra Valley"
+],
+
+Lonavala:[
+"Tiger Point",
+"Bhushi Dam",
+"Karla Caves",
+"Lohagad Fort",
+"Rajmachi Fort"
+],
+
+Lucknow:[
+"Bara Imambara",
+"Chota Imambara",
+"Rumi Darwaza",
+"British Residency",
+"Hazratganj"
+],
+
+Madurai:[
+"Meenakshi Amman Temple",
+"Thirumalai Nayakkar Palace",
+"Gandhi Memorial Museum",
+"Vandiyur Mariamman Teppakulam",
+"Alagar Koyil"
+],
+
+Manali:[
+"Hidimba Devi Temple",
+"Solang Valley",
+"Rohtang Pass",
+"Old Manali",
+"Manu Temple",
+"Vashisht Hot Springs"
+],
+
+Mangalore:[
+"Panambur Beach",
+"Tannirbhavi Beach",
+"Kadri Manjunath Temple",
+"Sultan Battery",
+"St Aloysius Chapel"
+],
+
+Munnar:[
+"Tea Gardens",
+"Eravikulam National Park",
+"Mattupetty Dam",
+"Echo Point",
+"Top Station",
+"Kundala Lake"
+],
+
+Mysore:[
+"Mysore Palace",
+"Chamundi Hill",
+"Brindavan Gardens",
+"St Philomena's Church",
+"Mysore Zoo"
+],
+
+Mumbai:[
+"Gateway of India",
+"Marine Drive",
+"Elephanta Caves",
+"CSMT",
+"Colaba Causeway"
+],
+
+Nagpur:[
+"Deekshabhoomi",
+"Futala Lake",
+"Sitabuldi Fort",
+"Seminary Hills",
+"Pench National Park"
+],
+
+Nainital:[
+"Naini Lake",
+"Naina Devi Temple",
+"Snow View Point",
+"Tiffin Top",
+"Eco Cave Gardens"
+],
+
+Nashik:[
+"Sula Vineyards",
+"Trimbakeshwar Temple",
+"Pandavleni Caves",
+"Godavari Ghat",
+"Anjaneri Hills"
+],
+
+Ooty:[
+"Ooty Lake",
+"Botanical Garden",
+"Doddabetta Peak",
+"Tea Factory",
+"Nilgiri Mountain Railway"
+],
+
+Panchgani:[
+"Table Land",
+"Sydney Point",
+"Parsi Point",
+"Devrai Art Village",
+"Mapro Garden"
+],
+
+Patna:[
+"Golghar",
+"Patna Museum",
+"Bihar Museum",
+"Takht Sri Patna Sahib",
+"Eco Park"
+],
+
+Pondicherry:[
+"French Quarter",
+"Promenade Beach",
+"Sri Aurobindo Ashram",
+"Auroville",
+"Paradise Beach"
+],
+
+Puri:[
+"Jagannath Temple",
+"Puri Beach",
+"Konark Sun Temple",
+"Chandrabhaga Beach",
+"Raghurajpur Artist Village"
+],
+
+Pushkar:[
+"Pushkar Lake",
+"Brahma Temple",
+"Savitri Temple",
+"Pushkar Bazaar",
+"Varaha Temple"
+],
+
+Raipur:[
+"Nandan Van Zoo",
+"MM Fun City",
+"Purkhouti Muktangan",
+"Telibandha Lake",
+"Mahant Ghasidas Museum"
+],
+
+Ranchi:[
+"Dassam Falls",
+"Hundru Falls",
+"Jagannath Temple",
+"Rock Garden",
+"Tagore Hill"
+],
+
+Rishikesh:[
+"Laxman Jhula",
+"Ram Jhula",
+"Triveni Ghat",
+"Neer Garh Waterfall",
+"River Rafting",
+"Beatles Ashram"
+],
+
+Shimla:[
+"Mall Road",
+"The Ridge",
+"Jakhu Temple",
+"Kufri",
+"Christ Church"
+],
+
+Shillong:[
+"Umiam Lake",
+"Elephant Falls",
+"Shillong Peak",
+"Ward's Lake",
+"Laitlum Canyon"
+],
+
+Sikkim:[
+"Tsomgo Lake",
+"Nathu La Pass",
+"Rumtek Monastery",
+"MG Marg Gangtok",
+"Nathang Valley"
+],
+
+Srinagar:[
+"Dal Lake",
+"Mughal Gardens",
+"Shankaracharya Temple",
+"Hazratbal Shrine",
+"Pari Mahal"
+],
+
+Surat:[
+"Dumas Beach",
+"Surat Castle",
+"Dutch Garden",
+"Sarthana Nature Park",
+"Gopi Talav"
+],
+
+Thanjavur:[
+"Brihadeeswarar Temple",
+"Thanjavur Palace",
+"Saraswathi Mahal Library",
+"Gangaikonda Cholapuram",
+"Schwartz Church"
+],
+
+Thiruvananthapuram:[
+"Padmanabhaswamy Temple",
+"Kovalam Beach",
+"Napier Museum",
+"Kuthira Malika Palace",
+"Kanakakunnu Palace"
+],
+
+Udaipur:[
+"City Palace",
+"Lake Pichola",
+"Jag Mandir",
+"Sajjangarh Palace",
+"Fateh Sagar Lake",
+"Bagore Ki Haveli"
+],
+
+Ujjain:[
+"Mahakaleshwar Temple",
+"Ram Ghat",
+"Kal Bhairav Temple",
+"Harsiddhi Temple",
+"Vedh Shala"
+],
+
+Varanasi:[
+"Kashi Vishwanath Temple",
+"Dashashwamedh Ghat",
+"Assi Ghat",
+"Sarnath",
+"Manikarnika Ghat"
+],
+
+Varkala:[
+"Varkala Cliff",
+"Varkala Beach",
+"Janardhana Swamy Temple",
+"Sivagiri Mutt",
+"Kappil Beach"
+],
+
+Visakhapatnam:[
+"RK Beach",
+"Kailasagiri",
+"Submarine Museum",
+"Araku Valley",
+"Borra Caves"
+],
+
+Wayanad:[
+"Edakkal Caves",
+"Banasura Sagar Dam",
+"Soochipara Falls",
+"Chembra Peak",
+"Wayanad Wildlife Sanctuary"
+],
+
+Singapore:[
+"Marina Bay Sands",
+"Gardens by the Bay",
+"Sentosa Island",
+"Universal Studios Singapore",
+"Merlion Park"
+]
+
+};
+
+
+/* =====================================================
+   RESTAURANTS + HOTELS
+===================================================== */
+
+const placeData={
+
+Goa:{
+restaurants:[
+"Beach Shack Restaurant",
+"Goan Spice Kitchen",
+"Sunset Beach Cafe"
+],
+hotels:[
+"Goa Beach Resort",
+"Palm Grove Hotel",
+"Seaside Comfort Lodge"
+]
+},
+
+Jaipur:{
+restaurants:[
+"Royal Rajasthani Kitchen",
+"Pink City Restaurant",
+"Heritage Cafe"
+],
+hotels:[
+"Pink City Palace Hotel",
+"Royal Jaipur Lodge",
+"Heritage Stay"
+]
+},
+
+Delhi:{
+restaurants:[
+"Delhi Spice House",
+"Old Delhi Kitchen",
+"Capital Food Cafe"
+],
+hotels:[
+"Capital Grand Hotel",
+"Delhi Comfort Lodge",
+"Central Stay"
+]
+},
+
+Mumbai:{
+restaurants:[
+"Mumbai Masala",
+"Marine Drive Cafe",
+"Coastal Kitchen"
+],
+hotels:[
+"Marine View Hotel",
+"Mumbai Central Lodge",
+"Gateway Stay"
+]
+},
+
+Agra:{
+restaurants:[
+"Taj Spice Restaurant",
+"Mughal Kitchen",
+"Agra Food House"
+],
+hotels:[
+"Taj View Hotel",
+"Agra Heritage Lodge",
+"Mughal Stay"
+]
+},
+
+Varanasi:{
+restaurants:[
+"Ganga View Restaurant",
+"Banaras Kitchen",
+"Holy City Cafe"
+],
+hotels:[
+"Ganga View Lodge",
+"Banaras Heritage Hotel",
+"Ghat Stay"
+]
+},
+
+Udaipur:{
+restaurants:[
+"Lake View Restaurant",
+"Royal Udaipur Kitchen",
+"Palace Cafe"
+],
+hotels:[
+"Lake Palace Stay",
+"Udaipur Heritage Hotel",
+"Royal Lake Lodge"
+]
+},
+
+Manali:{
+restaurants:[
+"Mountain View Cafe",
+"Himalayan Kitchen",
+"Snow Valley Restaurant"
+],
+hotels:[
+"Mountain View Lodge",
+"Himalayan Resort",
+"Snow Valley Hotel"
+]
+},
+
+Shimla:{
+restaurants:[
+"Hilltop Restaurant",
+"Shimla Cafe",
+"Mountain Spice"
+],
+hotels:[
+"Hill View Hotel",
+"Shimla Lodge",
+"Snow Peak Stay"
+]
+},
+
+Darjeeling:{
+restaurants:[
+"Himalayan Cafe",
+"Darjeeling Kitchen",
+"Tea Garden Restaurant"
+],
+hotels:[
+"Himalayan View Lodge",
+"Darjeeling Heritage Hotel",
+"Tea Garden Stay"
+]
+},
+
+Kolkata:{
+restaurants:[
+"Bengal Spice",
+"Kolkata Kitchen",
+"Park Street Cafe"
+],
+hotels:[
+"Victoria Hotel",
+"Kolkata Central Lodge",
+"Bengal Heritage Stay"
+]
+},
+
+Bengaluru:{
+restaurants:[
+"Garden City Restaurant",
+"Bangalore Kitchen",
+"Tech City Cafe"
+],
+hotels:[
+"Garden City Hotel",
+"Bangalore Central Lodge",
+"Tech Park Stay"
+]
+},
+
+Hyderabad:{
+restaurants:[
+"Hyderabad Biryani House",
+"Deccan Kitchen",
+"Charminar Cafe"
+],
+hotels:[
+"Deccan Palace Hotel",
+"Hyderabad Central Lodge",
+"Charminar Stay"
+]
+},
+
+Chennai:{
+restaurants:[
+"Chennai Spice",
+"Marina Restaurant",
+"South Indian Kitchen"
+],
+hotels:[
+"Marina View Hotel",
+"Chennai Central Lodge",
+"Tamil Heritage Stay"
+]
+},
+
+Kochi:{
+restaurants:[
+"Kerala Kitchen",
+"Fort Kochi Cafe",
+"Coastal Spice"
+],
+hotels:[
+"Fort Kochi Lodge",
+"Kerala Heritage Hotel",
+"Coastal Stay"
+]
+},
+
+Mysore:{
+restaurants:[
+"Mysore Spice House",
+"Palace View Restaurant",
+"South Kitchen"
+],
+hotels:[
+"Mysore Palace Hotel",
+"Royal Lodge",
+"Garden Stay"
+]
+},
+
+Rishikesh:{
+restaurants:[
+"Ganga Cafe",
+"Yoga Kitchen",
+"Rishikesh Food House"
+],
+hotels:[
+"Ganga View Lodge",
+"Yoga Retreat Hotel",
+"Rishikesh Riverside Stay"
+]
+},
+
+Amritsar:{
+restaurants:[
+"Punjabi Kitchen",
+"Amritsari Food House",
+"Golden Temple Cafe"
+],
+hotels:[
+"Golden Temple Hotel",
+"Amritsar Heritage Lodge",
+"Punjab Stay"
+]
+},
+
+Ahmedabad:{
+restaurants:[
+"Gujarati Kitchen",
+"Ahmedabad Food House",
+"Sabarmati Cafe"
+],
+hotels:[
+"Sabarmati Hotel",
+"Ahmedabad Central Lodge",
+"Gujarat Heritage Stay"
+]
+},
+
+Pune:{
+restaurants:[
+"Pune Spice Kitchen",
+"Maharashtra Restaurant",
+"City Cafe"
+],
+hotels:[
+"Pune Central Hotel",
+"Heritage Lodge",
+"City Comfort Stay"
+]
+},
+
+Jodhpur:{
+restaurants:[
+"Blue City Kitchen",
+"Rajasthani Spice",
+"Fort View Cafe"
+],
+hotels:[
+"Blue City Lodge",
+"Royal Jodhpur Hotel",
+"Fort View Stay"
+]
+},
+
+Jaisalmer:{
+restaurants:[
+"Desert Spice",
+"Golden Fort Restaurant",
+"Desert Cafe"
+],
+hotels:[
+"Desert Camp",
+"Golden City Hotel",
+"Jaisalmer Heritage Lodge"
+]
+},
+
+Leh:{
+restaurants:[
+"Ladakhi Kitchen",
+"Mountain Cafe",
+"Leh Food House"
+],
+hotels:[
+"Himalayan Lodge",
+"Leh Palace Hotel",
+"Mountain View Stay"
+]
+},
+
+Mussoorie:{
+restaurants:[
+"Hill Cafe",
+"Mussoorie Kitchen",
+"Mountain Spice"
+],
+hotels:[
+"Hill View Lodge",
+"Mussoorie Resort",
+"Lal Tibba Stay"
+]
+},
+
+Alappuzha:{
+restaurants:[
+"Backwater Kitchen",
+"Kerala Seafood House",
+"Alleppey Cafe"
+],
+hotels:[
+"Backwater Resort",
+"Houseboat Stay",
+"Kerala Lodge"
+]
+},
+
+Ooty:{
+restaurants:[
+"Ooty Garden Cafe",
+"Nilgiri Kitchen",
+"Hill Food House"
+],
+hotels:[
+"Ooty Hill Resort",
+"Tea Garden Lodge",
+"Nilgiri Stay"
+]
+},
+
+Coorg:{
+restaurants:[
+"Coorg Spice Kitchen",
+"Coffee Estate Cafe",
+"Kodagu Restaurant"
+],
+hotels:[
+"Coffee Estate Resort",
+"Coorg Lodge",
+"Valley View Stay"
+]
+},
+
+Mahabaleshwar:{
+restaurants:[
+"Hill Spice Restaurant",
+"Mahabaleshwar Cafe",
+"Mapro Food House"
+],
+hotels:[
+"Hill Resort",
+"Lake View Lodge",
+"Mahabaleshwar Stay"
+]
+},
+
+Visakhapatnam:{
+restaurants:[
+"Coastal Kitchen",
+"Vizag Food House",
+"Beach Cafe"
+],
+hotels:[
+"Beach View Hotel",
+"Vizag Central Lodge",
+"Coastal Stay"
+]
+},
+
+Bhubaneswar:{
+restaurants:[
+"Odisha Kitchen",
+"Bhubaneswar Spice",
+"Temple City Cafe"
+],
+hotels:[
+"Temple City Hotel",
+"Bhubaneswar Lodge",
+"Odisha Heritage Stay"
+]
+},
+
+Puri:{
+restaurants:[
+"Odisha Seafood Restaurant",
+"Puri Beach Cafe",
+"Jagannath Kitchen"
+],
+hotels:[
+"Puri Beach Hotel",
+"Jagannath Lodge",
+"Coastal Resort"
+]
+},
+
+Konark:{
+restaurants:[
+"Konark Kitchen",
+"Coastal Food House",
+"Sun Temple Cafe"
+],
+hotels:[
+"Konark Lodge",
+"Sun Temple Hotel",
+"Coastal Stay"
+]
+},
+
+Shillong:{
+restaurants:[
+"Meghalaya Kitchen",
+"Hilltop Cafe",
+"Shillong Food House"
+],
+hotels:[
+"Shillong Hill Hotel",
+"Meghalaya Lodge",
+"Lake View Stay"
+]
+},
+
+Gangtok:{
+restaurants:[
+"Sikkim Kitchen",
+"Mountain Food House",
+"MG Marg Cafe"
+],
+hotels:[
+"Gangtok Hill Hotel",
+"Sikkim Lodge",
+"Mountain View Stay"
+]
+},
+
+Patna:{
+restaurants:[
+"Bihar Kitchen",
+"Patna Food House",
+"Ganga Cafe"
+],
+hotels:[
+"Patna Central Hotel",
+"Ganga Lodge",
+"Bihar Heritage Stay"
+]
+},
+
+Ranchi:{
+restaurants:[
+"Jharkhand Kitchen",
+"Ranchi Food House",
+"Waterfall Cafe"
+],
+hotels:[
+"Ranchi Central Hotel",
+"Hill Lodge",
+"Jharkhand Stay"
+]
+},
+
+Surat:{
+restaurants:[
+"Surati Kitchen",
+"Gujarati Food House",
+"Dumas Cafe"
+],
+hotels:[
+"Surat Central Hotel",
+"Dumas Lodge",
+"Gujarat Stay"
+]
+},
+
+Lucknow:{
+restaurants:[
+"Awadhi Kitchen",
+"Lucknow Food House",
+"Nawabi Cafe"
+],
+hotels:[
+"Nawabi Hotel",
+"Lucknow Heritage Lodge",
+"Hazratganj Stay"
+]
+},
+
+Indore:{
+restaurants:[
+"Indore Food House",
+"Sarafa Kitchen",
+"Madhya Pradesh Cafe"
+],
+hotels:[
+"Indore Central Hotel",
+"Rajwada Lodge",
+"City Comfort Stay"
+]
+},
+
+Bhopal:{
+restaurants:[
+"Bhopal Kitchen",
+"Lake View Restaurant",
+"MP Food House"
+],
+hotels:[
+"Lake View Hotel",
+"Bhopal Lodge",
+"Central Stay"
+]
+},
+
+Nagpur:{
+restaurants:[
+"Nagpur Spice",
+"Orange City Kitchen",
+"Lake Cafe"
+],
+hotels:[
+"Orange City Hotel",
+"Nagpur Lodge",
+"Central Stay"
+]
+},
+
+Raipur:{
+restaurants:[
+"Raipur Kitchen",
+"Chhattisgarh Food House",
+"Lake Cafe"
+],
+hotels:[
+"Raipur Central Hotel",
+"City Lodge",
+"Chhattisgarh Stay"
+]
+}
+
+};
+
+
+/* =====================================================
+   FOOD
+===================================================== */
+
+const foodData={
+
+Goa:[
+["Goan Fish Curry","Traditional coastal Goan curry."],
+["Bebinca","Classic Goan layered dessert."],
+["Prawn Balchão","Spicy seafood preparation."]
+],
+
+Jaipur:[
+["Dal Baati Churma","Famous Rajasthani traditional meal."],
+["Pyaaz Kachori","Popular Jaipur snack."],
+["Ghewar","Traditional Rajasthani sweet."]
+],
+
+Delhi:[
+["Chole Bhature","Popular North Indian dish."],
+["Butter Chicken","Famous Delhi-style meal."],
+["Chaat","Try local street-food varieties."]
+],
+
+Mumbai:[
+["Vada Pav","Iconic Mumbai street food."],
+["Pav Bhaji","Classic Mumbai snack."],
+["Bombay Sandwich","Popular local street food."]
+],
+
+Manali:[
+["Siddu","Traditional Himachali dish."],
+["Thukpa","Warm noodle soup popular in the hills."],
+["Momos","Popular mountain snack."]
+],
+
+Munnar:[
+["Appam & Stew","Classic Kerala combination."],
+["Puttu & Kadala","Traditional Kerala breakfast."],
+["Kerala Sadya","Vegetarian feast served traditionally."]
+],
+
+Varanasi:[
+["Kachori Sabzi","Popular local breakfast."],
+["Banarasi Lassi","Famous creamy drink."],
+["Banarasi Paan","Traditional local specialty."]
+],
+
+Udaipur:[
+["Dal Baati Churma","Classic Rajasthani food."],
+["Laal Maas","Traditional spicy Rajasthani dish."],
+["Ghewar","Popular regional sweet."]
+],
+
+Kolkata:[
+["Kolkata Biryani","Famous regional biryani."],
+["Rosogolla","Classic Bengali sweet."],
+["Mishti Doi","Traditional sweet yogurt."]
+],
+
+Amritsar:[
+["Amritsari Kulcha","Famous stuffed flatbread."],
+["Sarson da Saag","Traditional Punjabi dish."],
+["Lassi","Classic Punjabi drink."]
+],
+
+Bhubaneswar:[
+["Dalma","Traditional Odia lentil and vegetable dish."],
+["Pakhala Bhata","Classic fermented rice preparation."],
+["Chhena Poda","Famous Odia dessert."]
+],
+
+Puri:[
+["Mahaprasad","Traditional food associated with Jagannath Temple."],
+["Pakhala Bhata","Popular Odia rice dish."],
+["Chhena Poda","Traditional Odisha dessert."]
+]
+
+};
+
+
+const genericFood=[
+
+["Local Speciality",
+"Try the most famous local dish of the destination."
+],
+
+["Street Food",
+"Explore popular local street-food areas."
+],
+
+["Traditional Meal",
+"Have a meal featuring regional cuisine."
+]
+
+];
+
+
+/* =====================================================
+   TRAVELER DESCRIPTIONS
+===================================================== */
+
+const descriptions={
+
+adventure:
+"Adventure-focused trip with outdoor activities, nature, trekking and exciting experiences.",
+
+relaxation:
+"Relaxing trip focused on beaches, scenic views, wellness and peaceful experiences.",
+
+family:
+"Family-friendly trip with comfortable sightseeing, culture, attractions and activities.",
+
+romantic:
+"Romantic trip with scenic places, sunsets, peaceful walks and memorable experiences.",
+
+luxury:
+"Premium trip with comfortable stays, fine dining, iconic attractions and special experiences.",
+
+budget:
+"Budget-friendly trip focusing on affordable sightseeing, local food and cultural experiences."
+
+};
+
+
+/* =====================================================
+   EXTRA ACTIVITIES
+===================================================== */
+
+const extraActivities={
+
+adventure:[
+"Nature trail",
+"Adventure activity",
+"Sunrise viewpoint",
+"Outdoor exploration",
+"Local hiking experience",
+"Water adventure"
+],
+
+relaxation:[
+"Scenic sunset",
+"Wellness experience",
+"Relaxing café visit",
+"Nature walk",
+"Leisure time",
+"Beach relaxation"
+],
+
+family:[
+"Family-friendly attraction",
+"Local market",
+"Cultural experience",
+"Family photography stop",
+"Local food experience",
+"Park or garden visit"
+],
+
+romantic:[
+"Sunset viewpoint",
+"Romantic café",
+"Couple photography spot",
+"Scenic evening walk",
+"Special dinner experience",
+"Sunrise together"
+],
+
+luxury:[
+"Premium dining experience",
+"Luxury shopping",
+"Private sightseeing experience",
+"Wellness experience",
+"Premium evening experience",
+"Luxury café experience"
+],
+
+budget:[
+"Local market exploration",
+"Free sightseeing",
+"Affordable local food",
+"Walking tour",
+"Local cultural experience",
+"Street food experience"
+]
+
+};
+
+
+/* =====================================================
+   HOTEL TYPES
+===================================================== */
+
+const hotelTypes={
+
+luxury:[
+["5-Star Resort","Premium resort with excellent amenities."],
+["Luxury Boutique Hotel","Stylish stay near major attractions."],
+["Premium Heritage Hotel","Comfortable stay with local character."]
+],
+
+budget:[
+["Budget Hotel","Affordable accommodation for travelers."],
+["Hostel","Good option for solo and budget travelers."],
+["Guesthouse","Simple local accommodation."]
+],
+
+family:[
+["Family Hotel","Comfortable rooms suitable for families."],
+["Resort","Family-friendly facilities and activities."],
+["Apartment Stay","Useful for families needing extra space."]
+],
+
+romantic:[
+["Romantic Resort","Scenic stay for couples."],
+["Boutique Hotel","Stylish and intimate accommodation."],
+["Heritage Stay","Memorable local experience."]
+],
+
+adventure:[
+["Mountain Lodge","Convenient for outdoor activities."],
+["Eco Resort","Nature-focused accommodation."],
+["Adventure Hostel","Affordable stay for active travelers."]
+],
+
+relaxation:[
+["Beach Resort","Peaceful stay near scenic areas."],
+["Wellness Resort","Relaxation and wellness focused."],
+["Boutique Retreat","Quiet and comfortable stay."]
+]
+
+};
+
+
+/* =====================================================
+   SHOW HOME
+===================================================== */
+
+function showHome(){
+
+    document.getElementById("planner").style.display="none";
+
+    document.getElementById("home").style.display="flex";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   SHOW PLANNER
+===================================================== */
+
+function showPlanner(){
+
+    document.getElementById("home").style.display="none";
+
+    document.getElementById("planner").style.display="block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   FILTER DESTINATIONS
+===================================================== */
+
+function filterDestinations(){
+
+    const input=
+        document
+        .getElementById("destination")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const box=
+        document.getElementById(
+            "destinationSuggestions"
+        );
+
+    box.innerHTML="";
+
+
+    if(input===""){
+
+        showLandmarks();
+
+        return;
+    }
+
+
+    const matches=
+        allDestinations
+        .filter(name =>
+            name.toLowerCase().includes(input)
+        )
+        .slice(0,8);
+
+
+    matches.forEach(name=>{
+
+        const chip=
+            document.createElement("div");
+
+        chip.className="destination-chip";
+
+        chip.innerText="📍 "+name;
+
+
+        chip.onclick=()=>{
+
+            document.getElementById(
+                "destination"
+            ).value=name;
+
+            box.innerHTML="";
+
+            showLandmarks();
+
+        };
+
+
+        box.appendChild(chip);
+
+    });
+
+
+    showLandmarks();
+
+}
+
+
+/* =====================================================
+   UPDATE LOCATIONS
+===================================================== */
+
+function updateLocations(){
+
+    const type=
+        document.getElementById(
+            "travelerType"
+        ).value;
+
+
+    const recommendation=
+        document.getElementById(
+            "recommendation"
+        );
+
+
+    const activityBox=
+        document.getElementById(
+            "activities"
+        );
+
+
+    if(!type){
+
+        recommendation.innerText=
+            "Select your traveler type to see recommended destinations.";
+
+        activityBox.placeholder=
+            "Example: beaches, trekking, museums, shopping";
+
+        return;
+
+    }
+
+
+    recommendation.innerText=
+        descriptions[type]+
+        " Recommended: "+
+        locations[type].join(", ");
+
+
+    activityBox.placeholder=
+        extraActivities[type].join(", ")+
+        "...";
+
+
+    const currentDestination=
+        document.getElementById(
+            "destination"
+        ).value;
+
+
+    if(
+        currentDestination &&
+        locations[type].includes(currentDestination)
+    ){
+
+        showLandmarks();
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW LANDMARKS
+===================================================== */
+
+function showLandmarks(){
+
+    const destination=
+        document.getElementById(
+            "destination"
+        ).value.trim();
+
+
+    const preview=
+        document.getElementById(
+            "landmarkPreview"
+        );
+
+
+    const list=
+        document.getElementById(
+            "landmarkList"
+        );
+
+
+    list.innerHTML="";
+
+
+    if(!destination){
+
+        preview.style.display="none";
+
+        return;
+
+    }
+
+
+    const key=
+        findDestinationKey(destination);
+
+
+    const places=
+        landmarks[key] || [];
+
+
+    if(!places.length){
+
+        preview.style.display="none";
+
+        return;
+
+    }
+
+
+    places.forEach(place=>{
+
+        const chip=
+            document.createElement("span");
+
+        chip.className="chip";
+
+        chip.innerText=
+            "📍 "+place;
+
+        list.appendChild(chip);
+
+    });
+
+
+    preview.style.display="block";
+
+}
+
+
+/* =====================================================
+   FIND DESTINATION KEY
+===================================================== */
+
+function findDestinationKey(destination){
+
+    const exact=
+        allDestinations.find(
+            name =>
+                name.toLowerCase() ===
+                destination.toLowerCase()
+        );
+
+    return exact || destination;
+
+}
+
+
+/* =====================================================
+   CREATE TRIP
+===================================================== */
+
+function createTrip(){
+
+    const type=
+        document.getElementById(
+            "travelerType"
+        ).value;
+
+
+    const destination=
+        document.getElementById(
+            "destination"
+        ).value.trim();
+
+
+    const travelers=
+        Number(
+            document.getElementById(
+                "travelers"
+            ).value
+        );
+
+
+    const start=
+        document.getElementById(
+            "start"
+        ).value;
+
+
+    const end=
+        document.getElementById(
+            "end"
+        ).value;
+
+
+    const budget=
+        Number(
+            document.getElementById(
+                "budget"
+            ).value
+        );
+
+
+    const style=
+        document.getElementById(
+            "style"
+        ).value;
+
+
+    const transport=
+        document.getElementById(
+            "transport"
+        ).value;
+
+
+    const activities=
+        document.getElementById(
+            "activities"
+        ).value.trim();
+
+
+    if(
+        !type ||
+        !destination ||
+        !start ||
+        !end ||
+        !budget
+    ){
+
+        alert(
+            "Please fill in traveler type, destination, dates and budget."
+        );
+
+        return;
+
+    }
+
+
+    if(travelers<1){
+
+        alert(
+            "Number of travelers must be at least 1."
+        );
+
+        return;
+
+    }
+
+
+    const startDate=
+        new Date(start);
+
+
+    const endDate=
+        new Date(end);
+
+
+    if(endDate<startDate){
+
+        alert(
+            "End date must be after the start date."
+        );
+
+        return;
+
+    }
+
+
+    const difference=
+        endDate.getTime() -
+        startDate.getTime();
+
+
+    const days=
+        Math.floor(
+            difference /
+            (1000*60*60*24)
+        )+1;
+
+
+    const dateOptions={
+        day:"numeric",
+        month:"short",
+        year:"numeric"
+    };
+
+
+    const startText=
+        startDate.toLocaleDateString(
+            "en-IN",
+            dateOptions
+        );
+
+
+    const endText=
+        endDate.toLocaleDateString(
+            "en-IN",
+            dateOptions
+        );
+
+
+    /* RESULT */
+
+    document.getElementById(
+        "resultDestination"
+    ).innerText=
+        "📍 "+destination;
+
+
+    document.getElementById(
+        "resultStyle"
+    ).innerText=
+        style+
+        " • "+
+        transport+
+        " • "+
+        type.charAt(0).toUpperCase()+
+        type.slice(1)+
+        " Traveler";
+
+
+    document.getElementById(
+        "resultDates"
+    ).innerText=
+        startText+
+        " - "+
+        endText;
+
+
+    document.getElementById(
+        "resultTravelers"
+    ).innerText=
+        travelers;
+
+
+    document.getElementById(
+        "resultDays"
+    ).innerText=
+        days+" Days";
+
+
+    document.getElementById(
+        "resultBudget"
+    ).innerText=
+        formatMoney(budget);
+
+
+    document.getElementById(
+        "result"
+    ).style.display="block";
+
+
+    /* FEATURES */
+
+    createBudget(
+        budget,
+        travelers
+    );
+
+
+    createScore(
+        type,
+        budget,
+        days,
+        travelers
+    );
+
+
+    createItinerary(
+        destination,
+        type,
+        days,
+        activities,
+        style
+    );
+
+
+    createFood(
+        destination
+    );
+
+
+    createHotels(
+        type
+    );
+
+
+    createTransport(
+        destination,
+        type,
+        transport
+    );
+
+
+    createNearby(
+        destination
+    );
+
+
+    createWeather(
+        destination
+    );
+
+
+    createMap(
+        destination
+    );
+
+
+    document.getElementById(
+        "result"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+function formatMoney(number){
+
+    return "₹"+
+        Math.round(number)
+        .toLocaleString("en-IN");
+
+}
+
+
+/* =====================================================
+   BUDGET
+===================================================== */
+
+function createBudget(total,travelers){
+
+    const hotel=
+        total*0.30;
+
+    const food=
+        total*0.20;
+
+    const transport=
+        total*0.20;
+
+    const activities=
+        total*0.20;
+
+    const emergency=
+        total*0.10;
+
+
+    document.getElementById(
+        "hotelBudget"
+    ).innerText=
+        formatMoney(hotel);
+
+
+    document.getElementById(
+        "foodBudget"
+    ).innerText=
+        formatMoney(food);
+
+
+    document.getElementById(
+        "transportBudget"
+    ).innerText=
+        formatMoney(transport);
+
+
+    document.getElementById(
+        "activityBudget"
+    ).innerText=
+        formatMoney(activities);
+
+
+    document.getElementById(
+        "emergencyBudget"
+    ).innerText=
+        formatMoney(emergency);
+
+
+    document.getElementById(
+        "budgetBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   TRIP SCORE
+===================================================== */
+
+function createScore(
+    type,
+    budget,
+    days,
+    travelers
+){
+
+    let match=
+        type
+        ? Math.min(
+            96,
+            70+
+            locations[type].length*2
+        )
+        :70;
+
+
+    let budgetScore=
+        budget>=100000
+        ? 96
+        :budget>=50000
+        ? 92
+        :budget>=30000
+        ? 88
+        :budget>=15000
+        ? 80
+        :70;
+
+
+    let experience=
+        Math.min(
+            98,
+            70+
+            days*3
+        );
+
+
+    let variety=
+        Math.min(
+            98,
+            65+
+            days*5
+        );
+
+
+    let total=
+        Math.round(
+            (
+                match+
+                budgetScore+
+                experience+
+                variety
+            )/4
+        );
+
+
+    document.getElementById(
+        "scoreNumber"
+    ).innerText=
+        total;
+
+
+    setProgress(
+        "experience",
+        experience
+    );
+
+
+    setProgress(
+        "budget",
+        budgetScore
+    );
+
+
+    setProgress(
+        "match",
+        match
+    );
+
+
+    setProgress(
+        "variety",
+        variety
+    );
+
+
+    document.getElementById(
+        "scoreBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function setProgress(
+    name,
+    value
+){
+
+    document.getElementById(
+        name+"Score"
+    ).innerText=
+        Math.round(value)+"%";
+
+
+    document.getElementById(
+        name+"Bar"
+    ).style.width=
+        value+"%";
+
+}
+
+
+/* =====================================================
+   ITINERARY
+===================================================== */
+
+function createItinerary(
+    destination,
+    type,
+    days,
+    userActivities,
+    style
+){
+
+    const container=
+        document.getElementById(
+            "itinerary"
+        );
+
+
+    container.innerHTML="";
+
+
+    const key=
+        findDestinationKey(
+            destination
+        );
+
+
+    const places=
+        landmarks[key] ||
+        [
+            "Explore the local area",
+            "Visit a popular attraction",
+            "Discover local culture",
+            "Try local food",
+            "Explore a local market"
+        ];
+
+
+    let custom=[];
+
+
+    if(userActivities){
+
+        custom=
+            userActivities
+            .split(",")
+            .map(
+                x=>x.trim()
+            )
+            .filter(
+                x=>x
+            );
+
+    }
+
+
+    let combined=[
+
+        ...places,
+
+        ...custom,
+
+        ...extraActivities[type]
+
+    ];
+
+
+    combined=[
+        ...new Set(combined)
+    ];
+
+
+    combined=
+        shuffleArray(
+            combined
+        );
+
+
+    const morningActivities=[
+
+        "Start the morning",
+
+        "Enjoy a relaxed breakfast before exploring",
+
+        "Begin sightseeing early",
+
+        "Enjoy the morning scenery",
+
+        "Start with a refreshing local experience"
+
+    ];
+
+
+    const afternoonActivities=[
+
+        "Explore the area and have lunch nearby",
+
+        "Continue sightseeing after lunch",
+
+        "Discover local culture and attractions",
+
+        "Enjoy the afternoon at your own pace",
+
+        "Explore nearby places"
+
+    ];
+
+
+    const eveningActivities=[
+
+        "Enjoy the evening atmosphere",
+
+        "Watch the sunset and explore nearby areas",
+
+        "Relax at a scenic location",
+
+        "Try local food and enjoy the evening",
+
+        "Enjoy a memorable evening experience"
+
+    ];
+
+
+    for(
+        let i=1;
+        i<=days;
+        i++
+    ){
+
+        const p1=
+            combined[
+                (i*3-3) %
+                combined.length
+            ];
+
+
+        const p2=
+            combined[
+                (i*3-2) %
+                combined.length
+            ];
+
+
+        const p3=
+            combined[
+                (i*3-1) %
+                combined.length
+            ];
+
+
+        const day=
+            document.createElement(
+                "div"
+            );
+
+
+        day.className="day";
+
+
+        day.innerHTML=`
+
+            <div class="day-header">
+
+                <div class="day-number">
+                    Day ${i}
+                </div>
+
+                <div>
+
+                    <h3>
+                        Day ${i} — ${destination}
+                    </h3>
+
+                    <p>
+                        ${getDayTheme(type,i)}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="time-slot">
+
+                <h4>
+                    🌅 Morning
+                </h4>
+
+                <p>
+                    <strong>
+                        ${p1}
+                    </strong>
+                    <br>
+                    ${morningActivities[(i-1)%morningActivities.length]}
+                    around ${destination}.
+                </p>
+
+                <div class="tags">
+
+                    <span class="tag">
+                        Morning
+                    </span>
+
+                    <span class="tag">
+                        📍 ${p1}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="time-slot">
+
+                <h4>
+                    ☀️ Afternoon
+                </h4>
+
+                <p>
+                    <strong>
+                        ${p2}
+                    </strong>
+                    <br>
+                    ${afternoonActivities[(i-1)%afternoonActivities.length]}.
+                </p>
+
+                <div class="tags">
+
+                    <span class="tag">
+                        Afternoon
+                    </span>
+
+                    <span class="tag">
+                        📍 ${p2}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="time-slot">
+
+                <h4>
+                    🌆 Evening
+                </h4>
+
+                <p>
+                    <strong>
+                        ${p3}
+                    </strong>
+                    <br>
+                    ${eveningActivities[(i-1)%eveningActivities.length]}.
+                </p>
+
+                <div class="tags">
+
+                    <span class="tag">
+                        Evening
+                    </span>
+
+                    <span class="tag">
+                        📍 ${p3}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(
+            day
+        );
+
+    }
+
+
+    document.getElementById(
+        "itineraryBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   DAY THEMES
+===================================================== */
+
+function getDayTheme(
+    type,
+    day
+){
+
+    const themes={
+
+        adventure:[
+
+            "Adventure and outdoor exploration.",
+
+            "Nature and exciting experiences.",
+
+            "Explore hidden gems and scenic locations.",
+
+            "A day filled with outdoor activities.",
+
+            "Relax after an exciting adventure."
+
+        ],
+
+        relaxation:[
+
+            "Slow down and enjoy peaceful surroundings.",
+
+            "Scenic exploration and relaxation.",
+
+            "Wellness and beautiful views.",
+
+            "Leisure, nature and local experiences.",
+
+            "A peaceful final day."
+
+        ],
+
+        family:[
+
+            "Family-friendly sightseeing and fun.",
+
+            "Culture, attractions and family experiences.",
+
+            "Explore the destination together.",
+
+            "Fun activities for everyone.",
+
+            "Relaxed family sightseeing."
+
+        ],
+
+        romantic:[
+
+            "A memorable day for two.",
+
+            "Scenic exploration and romantic moments.",
+
+            "Beautiful places and unforgettable experiences.",
+
+            "Sunsets, food and peaceful walks.",
+
+            "A special final day together."
+
+        ],
+
+        luxury:[
+
+            "Premium experiences and iconic attractions.",
+
+            "Comfortable sightseeing and fine dining.",
+
+            "Exclusive-feeling experiences.",
+
+            "Relaxation and premium exploration.",
+
+            "A luxurious final day."
+
+        ],
+
+        budget:[
+
+            "Affordable sightseeing and local experiences.",
+
+            "Discover the city without overspending.",
+
+            "Local culture, food and free attractions.",
+
+            "Explore more while staying within budget.",
+
+            "Enjoy your destination economically."
+
+        ]
+
+    };
+
+
+    return themes[type][
+        (day-1) %
+        themes[type].length
+    ];
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffleArray(array){
+
+    const copy=[
+        ...array
+    ];
+
+
+    for(
+        let i=copy.length-1;
+        i>0;
+        i--
+    ){
+
+        const j=
+            Math.floor(
+                Math.random()*
+                (i+1)
+            );
+
+
+        [
+            copy[i],
+            copy[j]
+        ]=[
+            copy[j],
+            copy[i]
+        ];
+
+    }
+
+
+    return copy;
+
+}
+
+
+/* =====================================================
+   FOOD
+===================================================== */
+
+function createFood(
+    destination
+){
+
+    const list=
+        document.getElementById(
+            "foodList"
+        );
+
+
+    list.innerHTML="";
+
+
+    const key=
+        findDestinationKey(
+            destination
+        );
+
+
+    const food=
+        foodData[key] ||
+        genericFood;
+
+
+    food.forEach(
+        item=>{
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className=
+                "rec-card";
+
+
+            card.innerHTML=`
+
+                <h3>
+                    🍴 ${item[0]}
+                </h3>
+
+                <p>
+                    ${item[1]}
+                </p>
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "foodBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   HOTELS
+===================================================== */
+
+function createHotels(
+    type
+){
+
+    const list=
+        document.getElementById(
+            "hotelList"
+        );
+
+
+    list.innerHTML="";
+
+
+    const hotels=
+        hotelTypes[type] ||
+        hotelTypes.budget;
+
+
+    hotels.forEach(
+        item=>{
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className=
+                "rec-card";
+
+
+            card.innerHTML=`
+
+                <h3>
+                    🏨 ${item[0]}
+                </h3>
+
+                <p>
+                    ${item[1]}
+                </p>
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "hotelBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   TRANSPORT
+===================================================== */
+
+function createTransport(
+    destination,
+    type,
+    preferred
+){
+
+    const list=
+        document.getElementById(
+            "transportList"
+        );
+
+
+    list.innerHTML="";
+
+
+    let options=[];
+
+
+    if(
+        preferred==="Flight"
+    ){
+
+        options=[
+
+            [
+                "✈️ Flight",
+                "Best for long-distance travel."
+            ],
+
+            [
+                "🚕 Local Cab",
+                "Convenient for sightseeing after arrival."
+            ],
+
+            [
+                "🚌 Local Transport",
+                "Useful for affordable city travel."
+            ]
+
+        ];
+
+    }
+
+    else if(
+        preferred==="Train"
+    ){
+
+        options=[
+
+            [
+                "🚆 Train",
+                "Comfortable option for many intercity routes."
+            ],
+
+            [
+                "🚕 Local Cab",
+                "Useful for local sightseeing."
+            ],
+
+            [
+                "🚌 Bus",
+                "Affordable option for nearby destinations."
+            ]
+
+        ];
+
+    }
+
+    else if(
+        preferred==="Bike"
+    ){
+
+        options=[
+
+            [
+                "🏍️ Rental Bike",
+                "Flexible option for exploring nearby attractions."
+            ],
+
+            [
+                "🚕 Local Taxi",
+                "Useful for longer distances."
+            ],
+
+            [
+                "🚌 Local Bus",
+                "Budget-friendly alternative."
+            ]
+
+        ];
+
+    }
+
+    else if(
+        destination==="Goa" ||
+        destination==="Mumbai" ||
+        destination==="Bengaluru" ||
+        destination==="Delhi"
+    ){
+
+        options=[
+
+            [
+                "🚕 Cab",
+                "Convenient for local sightseeing."
+            ],
+
+            [
+                "🚌 Bus / Metro",
+                "Affordable option for city travel."
+            ],
+
+            [
+                "🚆 Train",
+                "Useful for regional connections."
+            ]
+
+        ];
+
+    }
+
+    else if(
+        destination==="Manali" ||
+        destination==="Shimla" ||
+        destination==="Munnar" ||
+        destination==="Darjeeling"
+    ){
+
+        options=[
+
+            [
+                "🚗 Rental Cab",
+                "Useful for sightseeing around hill areas."
+            ],
+
+            [
+                "🚌 Bus",
+                "Affordable option for nearby towns."
+            ],
+
+            [
+                "🚕 Local Taxi",
+                "Convenient for individual attractions."
+            ]
+
+        ];
+
+    }
+
+    else{
+
+        options=[
+
+            [
+                "🚗 Cab",
+                "Convenient for sightseeing."
+            ],
+
+            [
+                "🚌 Local Bus",
+                "Budget-friendly option."
+            ],
+
+            [
+                "🚕 Auto / Local Taxi",
+                "Useful for short-distance travel."
+            ]
+
+        ];
+
+    }
+
+
+    options.forEach(
+        item=>{
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className=
+                "rec-card";
+
+
+            card.innerHTML=`
+
+                <h3>
+                    ${item[0]}
+                </h3>
+
+                <p>
+                    ${item[1]}
+                </p>
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "transportBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   NEARBY PLACES
+===================================================== */
+
+function createNearby(
+    destination
+){
+
+    const key=
+        findDestinationKey(
+            destination
+        );
+
+
+    const data=
+        placeData[key] || {
+
+            restaurants:[
+                "Popular Local Restaurant",
+                "City Food House",
+                "Local Cafe"
+            ],
+
+            hotels:[
+                "City Hotel",
+                "Comfort Lodge",
+                "Central Stay"
+            ]
+
+        };
+
+
+    const landmarkPlaces=
+        landmarks[key] || [
+
+            "Popular City Landmark",
+            "Local Museum",
+            "Main Tourist Attraction"
+
+        ];
+
+
+    window.currentPlaces={
+
+        restaurant:
+            data.restaurants,
+
+        hotel:
+            data.hotels,
+
+        landmark:
+            landmarkPlaces
+
+    };
+
+
+    showPlaces(
+        "restaurant"
+    );
+
+
+    document.getElementById(
+        "nearbyBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   SHOW PLACES
+===================================================== */
+
+function showPlaces(
+    type,
+    button
+){
+
+    const grid=
+        document.getElementById(
+            "placeGrid"
+        );
+
+
+    grid.innerHTML="";
+
+
+    if(button){
+
+        document
+        .querySelectorAll(
+            ".place-tab"
+        )
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    "active"
+                )
+        );
+
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    const places=
+        window.currentPlaces &&
+        window.currentPlaces[type]
+        ?
+        window.currentPlaces[type]
+        :
+        [];
+
+
+    places.forEach(
+        (place,index)=>{
+
+            let image;
+
+
+            if(type==="restaurant"){
+
+                image=
+                "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80";
+
+            }
+
+            else if(type==="hotel"){
+
+                image=
+                "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+
+            }
+
+            else{
+
+                image=
+                "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80";
+
+            }
+
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className=
+                "place-card";
+
+
+            card.innerHTML=`
+
+                <img
+                    src="${image}"
+                    alt="${place}"
+                    loading="lazy"
+                >
+
+
+                <div class="place-content">
+
+                    <h3>
+                        ${place}
+                    </h3>
+
+                    <p>
+                        📍 Near your selected destination
+                    </p>
+
+
+                    ${
+                        type==="landmark"
+
+                        ?
+
+                        `<span class="status">
+                            ⭐ Recommended
+                        </span>`
+
+                        :
+
+                        `<span class="status">
+                            ● Check availability
+                        </span>`
+                    }
+
+
+                    <br>
+
+
+                    <a
+                        class="map-btn"
+                        target="_blank"
+                        rel="noopener"
+                        href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}"
+                    >
+                        🗺️ Open Maps
+                    </a>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   WEATHER
+===================================================== */
+
+function createWeather(
+    destination
+){
+
+    const month=
+        new Date().getMonth()+1;
+
+
+    let seasonText;
+
+
+    if(
+        month>=3 &&
+        month<=5
+    ){
+
+        seasonText=
+            "Warm weather is common. Carry light clothes, sunscreen and water.";
+
+    }
+
+    else if(
+        month>=6 &&
+        month<=9
+    ){
+
+        seasonText=
+            "Monsoon conditions may occur. Carry an umbrella or rain jacket and check local forecasts before outdoor activities.";
+
+    }
+
+    else{
+
+        seasonText=
+            "Generally pleasant travel conditions may occur. Carry light layers for changing temperatures.";
+
+    }
+
+
+    document.getElementById(
+        "weatherTitle"
+    ).innerText=
+        "🌦️ Planning weather for "+
+        destination;
+
+
+    document.getElementById(
+        "weatherText"
+    ).innerText=
+        seasonText;
+
+
+    document.getElementById(
+        "weatherBox"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+function createMap(
+    destination
+){
+
+    const encoded=
+        encodeURIComponent(
+            destination
+        );
+
+
+    document.getElementById(
+        "mapFrame"
+    ).src=
+        "https://www.google.com/maps?q="+
+        encoded+
+        "&output=embed";
+
+
+    document.getElementById(
+        "mapBox"
+    ).style.display="block";
+
+}
+
+
+function openMap(){
+
+    const destination=
+        document.getElementById(
+            "destination"
+        ).value;
+
+
+    if(destination){
+
+        window.open(
+
+            "https://www.google.com/maps/search/?api=1&query="+
+            encodeURIComponent(
+                destination
+            ),
+
+            "_blank"
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   REGENERATE
+===================================================== */
+
+function regenerateTrip(){
+
+    const type=
+        document.getElementById(
+            "travelerType"
+        ).value;
+
+
+    const destination=
+        document.getElementById(
+            "destination"
+        ).value;
+
+
+    const startValue=
+        document.getElementById(
+            "start"
+        ).value;
+
+
+    const endValue=
+        document.getElementById(
+            "end"
+        ).value;
+
+
+    const activities=
+        document.getElementById(
+            "activities"
+        ).value;
+
+
+    const style=
+        document.getElementById(
+            "style"
+        ).value;
+
+
+    if(
+        !destination ||
+        !startValue ||
+        !endValue ||
+        !type
+    ){
+
+        return;
+
+    }
+
+
+    const start=
+        new Date(
+            startValue
+        );
+
+
+    const end=
+        new Date(
+            endValue
+        );
+
+
+    const days=
+        Math.floor(
+            (end-start) /
+            (1000*60*60*24)
+        )+1;
+
+
+    createItinerary(
+        destination,
+        type,
+        days,
+        activities,
+        style
+    );
+
+
+    document.getElementById(
+        "itineraryBox"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   SAVE FAVORITE
+===================================================== */
+
+function saveFavorite(){
+
+    const trip={
+
+        destination:
+            document.getElementById(
+                "destination"
+            ).value,
+
+        travelerType:
+            document.getElementById(
+                "travelerType"
+            ).value,
+
+        travelers:
+            document.getElementById(
+                "travelers"
+            ).value,
+
+        start:
+            document.getElementById(
+                "start"
+            ).value,
+
+        end:
+            document.getElementById(
+                "end"
+            ).value,
+
+        budget:
+            document.getElementById(
+                "budget"
+            ).value,
+
+        style:
+            document.getElementById(
+                "style"
+            ).value,
+
+        transport:
+            document.getElementById(
+                "transport"
+            ).value,
+
+        activities:
+            document.getElementById(
+                "activities"
+            ).value
+
+    };
+
+
+    localStorage.setItem(
+        "wanderPlanFavorite",
+        JSON.stringify(
+            trip
+        )
+    );
+
+
+    document.getElementById(
+        "favoriteMessage"
+    ).style.display="block";
+
+}
+
+
+/* =====================================================
+   LOAD FAVORITE
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        const saved=
+            localStorage.getItem(
+                "wanderPlanFavorite"
+            );
+
+
+        if(saved){
+
+            console.log(
+                "Saved WanderPlan trip found."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ENTER KEY DESTINATION
+===================================================== */
+
+document
+.getElementById("destination")
+.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key==="Enter"
+        ){
+
+            event.preventDefault();
+
+            const firstChip=
+                document.querySelector(
+                    ".destination-chip"
+                );
+
+
+            if(firstChip){
+
+                firstChip.click();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+updateLocations();
+
+</script>
+
+</body>
+</html>
